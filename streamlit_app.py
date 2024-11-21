@@ -1,94 +1,3 @@
-# import streamlit as st
-# from transformers import BertForSequenceClassification, BertTokenizer
-# import torch
-# import requests
-# import pandas as pd
-
-# # Set device
-# device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
-
-# # Load custom-trained BERT model and tokenizer
-# @st.cache_resource
-# def load_model_and_tokenizer():
-#     model_path = "saved_model_new"  # Replace with your saved model directory
-#     model = BertForSequenceClassification.from_pretrained(model_path).to(device)
-#     tokenizer = BertTokenizer.from_pretrained(model_path)
-#     return model, tokenizer
-
-# # Load model and tokenizer
-# model, tokenizer = load_model_and_tokenizer()
-
-# # Streamlit UI
-# st.title("Multi-Label Classification with BERT and Explanation using Gemini API")
-# st.write("This app uses a custom-trained multi-label BERT model to classify text and Gemini API to explain the classification results.")
-
-# # User input
-# input_text = st.text_area("Enter your text here", height=200)
-
-# # Set Gemini API details
-# gemini_api_url = "https://api.gemini.com/your_endpoint"  # Replace with your Gemini API endpoint
-# api_key = ""  # Replace with your Gemini API key
-
-# def get_gemini_explanation(predicted_labels, input_text):
-#     # Create a request payload to send to the Gemini API
-#     payload = {
-#         "input_text": input_text,
-#         "predicted_labels": predicted_labels,
-#     }
-    
-#     headers = {
-#         "Authorization": f"Bearer {api_key}",
-#         "Content-Type": "application/json"
-#     }
-    
-#     # Make a request to the Gemini API
-#     response = requests.post(gemini_api_url, json=payload, headers=headers)
-    
-#     if response.status_code == 200:
-#         # If the request is successful, return the explanation
-#         explanation = response.json().get("explanation", "")
-#         return explanation
-#     else:
-#         return "Error: Unable to get explanation from Gemini API."
-
-# if st.button("Classify and Explain"):
-#     if input_text.strip():
-#         with st.spinner("Classifying the input text..."):
-#             # Tokenize input for BERT
-#             inputs = tokenizer(input_text, return_tensors="pt", truncation=True, padding=True, max_length=512).to(device)
-            
-#             # Run the BERT model (disable gradient computation for inference)
-#             with torch.no_grad():
-#                 logits = model(**inputs).logits
-
-#             # Apply sigmoid to logits to get probabilities for each label
-#             probabilities = torch.sigmoid(logits)
-
-#             # Define a threshold (e.g., 0.5) to determine which labels to consider "active"
-#             threshold = 0.5
-#             predicted_labels = (probabilities > threshold).int()
-
-#             # Get the label names from the model configuration
-#             labels = model.config.id2label
-
-#             # Display the predicted labels
-#             st.write("### Predicted Labels:")
-#             active_labels = []
-#             for label_id, is_predicted in enumerate(predicted_labels[0]):
-#                 if is_predicted.item() == 1:
-#                     active_labels.append(labels[label_id])
-
-#             if active_labels:
-#                 st.write(f"- {', '.join(active_labels)}")
-#             else:
-#                 st.write("No labels predicted.")
-
-#             # Call the Gemini API to get the explanation
-#             st.write("### Explanation of Prediction:")
-#             explanation = get_gemini_explanation(active_labels, input_text)
-#             st.write(explanation)
-#     else:
-#         st.error("Please enter some text to classify and explain.")
 import os
 import streamlit as st
 from transformers import BertForSequenceClassification, BertTokenizer
@@ -107,7 +16,7 @@ def load_model_and_tokenizer():
     return model, tokenizer
 
 # Load Gemini API
-GOOGLE_API_KEY = 'AIzaSyCehc3WqAnUhjKZj1Sx6UbLFJJyLl1lZ4U'  # Ensure that your API key is set in the environment variables
+GOOGLE_API_KEY = 'Your API Here'  # Ensure that your API key is set in the environment variables
 genai.configure(api_key=GOOGLE_API_KEY)
 
 # Load the models
